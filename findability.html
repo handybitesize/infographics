@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Findability: Igniting the Agent Era</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --brand-cyan: #22d3ee;
+            --brand-violet: #8b5cf6;
+            --brand-sun: #fbbf24;
+            --brand-green: #34d399;
+            --card-bg: rgba(15, 23, 42, 0.7);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020617;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body::selection {
+            background: var(--brand-cyan);
+            color: #020617;
+        }
+        .nebula {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.35), transparent 45%),
+                        radial-gradient(circle at 80% 0%, rgba(168, 85, 247, 0.35), transparent 40%),
+                        radial-gradient(circle at 50% 80%, rgba(251, 191, 36, 0.2), transparent 45%);
+            filter: blur(60px);
+            opacity: 0.9;
+            pointer-events: none;
+        }
+        .star-grid {
+            position: fixed;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        .glow-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1.75rem;
+            box-shadow: 0 15px 50px rgba(2, 6, 23, 0.6);
+            backdrop-filter: blur(18px);
+        }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .floating-orb {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.45), transparent 70%);
+            filter: blur(4px);
+            animation: drift 18s ease-in-out infinite;
+        }
+        .floating-orb:nth-child(2) {
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.35), transparent 70%);
+            animation-duration: 26s;
+        }
+        @keyframes drift {
+            0% { transform: translate3d(-15%, -5%, 0) scale(0.8); }
+            50% { transform: translate3d(10%, 15%, 0) scale(1.1); }
+            100% { transform: translate3d(-10%, -8%, 0) scale(0.85); }
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 3.5rem;
+            left: 0.9rem;
+            width: 2px;
+            height: calc(100% - 4rem);
+            background: linear-gradient(to bottom, rgba(226, 232, 240, 0), rgba(226, 232, 240, 0.8), rgba(226, 232, 240, 0));
+        }
+        .timeline-step::before {
+            content: attr(data-step);
+            position: absolute;
+            left: -2.8rem;
+            top: 0;
+            width: 2.3rem;
+            height: 2.3rem;
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(34, 211, 238, 0.4), rgba(139, 92, 246, 0.4));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: grid;
+            place-items: center;
+            font-weight: 700;
+        }
+        .chart-shell {
+            height: 360px;
+        }
+        @media (min-width: 768px) {
+            .chart-shell {
+                height: 460px;
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        midnight: '#020617',
+                        aurora: '#22d3ee',
+                        pulse: '#8b5cf6',
+                        ember: '#fbbf24',
+                    },
+                    dropShadow: {
+                        glow: '0 10px 35px rgba(34, 211, 238, 0.35)',
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-midnight text-slate-100 antialiased relative">
+    <div class="nebula"></div>
+    <div class="star-grid"></div>
+
+    <main class="relative z-10 px-4 md:px-8 lg:px-10 max-w-7xl mx-auto py-12 md:py-20 space-y-20">
+        <header class="glow-card relative overflow-hidden p-8 md:p-12">
+            <div class="floating-orb -left-6 top-10"></div>
+            <div class="floating-orb right-10 -bottom-8"></div>
+            <div class="relative grid gap-12 lg:grid-cols-[1.2fr_0.8fr] items-center">
+                <div>
+                    <div class="pill bg-white/10 text-slate-200">Findability Field Guide · 2025</div>
+                    <h1 class="mt-6 text-4xl md:text-6xl font-black leading-tight">
+                        From SEO to <span class="text-transparent bg-clip-text bg-gradient-to-r from-aurora via-pulse to-ember drop-shadow-glow">Agentic Experience Optimization</span>
+                    </h1>
+                    <p class="mt-5 text-lg md:text-xl text-slate-200 max-w-2xl">
+                        Search engines indexed documents. Agents index capabilities. The winners are building discoverable, reliable, machine-consumable data services today.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <span class="pill bg-gradient-to-r from-aurora/20 to-pulse/20 border border-aurora/30 text-aurora">Query → Action Hand-off</span>
+                        <span class="pill bg-white/5 border border-white/10 text-white">Human Trust × Machine Certainty</span>
+                        <span class="pill bg-gradient-to-r from-ember/20 to-green-300/20 border border-ember/30 text-amber-200">Data Composability</span>
+                    </div>
+                </div>
+                <div class="grid gap-4">
+                    <div class="glow-card p-5 border-white/5">
+                        <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Agent-ready data</p>
+                        <p class="mt-3 text-4xl font-black text-white">12x</p>
+                        <p class="text-sm text-slate-300">Lift in selection when data objects expose clarity, contracts, and confidence.</p>
+                    </div>
+                    <div class="glow-card p-5 border-white/5">
+                        <p class="text-sm uppercase tracking-[0.3em] text-slate-400">Action latency</p>
+                        <p class="mt-3 text-4xl font-black text-white">&lt; 800 ms</p>
+                        <p class="text-sm text-slate-300">Target for agents before they hand the user a suggestion.</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="space-y-10">
+            <div class="text-center max-w-3xl mx-auto">
+                <p class="pill bg-white/5 border border-white/10 text-white mx-auto">Signal Shift</p>
+                <h2 class="mt-6 text-3xl md:text-4xl font-bold">SEO optimized for eyeballs. AEO optimizes for execution.</h2>
+                <p class="mt-4 text-lg text-slate-300">
+                    Agents evaluate data assets across precision, portability, and proof. Elevate every signal that shortens the "decide → do" loop.
+                </p>
+            </div>
+            <div class="grid gap-6 md:grid-cols-2">
+                <article class="glow-card p-6">
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-300 font-semibold">SEO reflex</span>
+                        <span class="text-emerald-300 font-semibold">Agent reality</span>
+                    </div>
+                    <h3 class="mt-4 text-2xl font-semibold text-white">Rankings → Runtime</h3>
+                    <div class="mt-5 grid gap-4 text-sm md:text-base">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <p class="text-slate-400 uppercase text-xs tracking-[0.25em]">Old Play</p>
+                            <p class="mt-2 text-slate-100">Keywords, backlinks, and click-through rates.</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-emerald-400/15 to-aurora/15 rounded-2xl p-4 border border-emerald-300/20">
+                            <p class="text-emerald-200 uppercase text-xs tracking-[0.25em]">New Play</p>
+                            <p class="mt-2 text-white">Execution reliability, structured results, and autonomous task completion.</p>
+                        </div>
+                    </div>
+                </article>
+                <article class="glow-card p-6">
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-300 font-semibold">SEO reflex</span>
+                        <span class="text-emerald-300 font-semibold">Agent reality</span>
+                    </div>
+                    <h3 class="mt-4 text-2xl font-semibold text-white">Pages → Products</h3>
+                    <div class="mt-5 grid gap-4 text-sm md:text-base">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <p class="text-slate-400 uppercase text-xs tracking-[0.25em]">Old Play</p>
+                            <p class="mt-2 text-slate-100">Long-form content that convinces a person to click.</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-emerald-400/15 to-aurora/15 rounded-2xl p-4 border border-emerald-300/20">
+                            <p class="text-emerald-200 uppercase text-xs tracking-[0.25em]">New Play</p>
+                            <p class="mt-2 text-white">Composable APIs, snippets, and contracts an agent can call immediately.</p>
+                        </div>
+                    </div>
+                </article>
+                <article class="glow-card p-6">
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-300 font-semibold">SEO reflex</span>
+                        <span class="text-emerald-300 font-semibold">Agent reality</span>
+                    </div>
+                    <h3 class="mt-4 text-2xl font-semibold text-white">Authority → Verifiability</h3>
+                    <div class="mt-5 grid gap-4 text-sm md:text-base">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <p class="text-slate-400 uppercase text-xs tracking-[0.25em]">Old Play</p>
+                            <p class="mt-2 text-slate-100">Domain score, domain age, and social proof.</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-emerald-400/15 to-aurora/15 rounded-2xl p-4 border border-emerald-300/20">
+                            <p class="text-emerald-200 uppercase text-xs tracking-[0.25em]">New Play</p>
+                            <p class="mt-2 text-white">Signed data, transparent lineage, real-time status beacons.</p>
+                        </div>
+                    </div>
+                </article>
+                <article class="glow-card p-6">
+                    <div class="flex items-center justify-between">
+                        <span class="text-amber-300 font-semibold">SEO reflex</span>
+                        <span class="text-emerald-300 font-semibold">Agent reality</span>
+                    </div>
+                    <h3 class="mt-4 text-2xl font-semibold text-white">Optimizing for visits → Optimizing for completions</h3>
+                    <div class="mt-5 grid gap-4 text-sm md:text-base">
+                        <div class="bg-white/5 rounded-2xl p-4">
+                            <p class="text-slate-400 uppercase text-xs tracking-[0.25em]">Old Play</p>
+                            <p class="mt-2 text-slate-100">Session time and conversion funnels.</p>
+                        </div>
+                        <div class="bg-gradient-to-r from-emerald-400/15 to-aurora/15 rounded-2xl p-4 border border-emerald-300/20">
+                            <p class="text-emerald-200 uppercase text-xs tracking-[0.25em]">New Play</p>
+                            <p class="mt-2 text-white">First-attempt success, fallback plans, operational transparency.</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="glow-card p-8 md:p-12">
+            <div class="text-center md:text-left flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+                <div>
+                    <p class="pill bg-white/5 border border-white/10 text-white">Momentum Ladder</p>
+                    <h2 class="mt-5 text-3xl md:text-4xl font-bold">Four jumps to agent-preferred experiences.</h2>
+                    <p class="mt-3 text-lg text-slate-300 max-w-2xl">Treat each layer as a sprint. Deliver enough signal for agents to trust, choose, and execute.</p>
+                </div>
+                <div class="flex gap-4 flex-wrap justify-center">
+                    <span class="pill bg-gradient-to-r from-aurora/20 to-pulse/20 border border-aurora/30 text-aurora">Telemetry native</span>
+                    <span class="pill bg-gradient-to-r from-emerald-400/20 to-amber-300/20 border border-emerald-400/30 text-emerald-200">Contracts first</span>
+                </div>
+            </div>
+            <div class="relative mt-12 pl-10 timeline">
+                <div class="space-y-10">
+                    <div class="timeline-step relative pl-10" data-step="01">
+                        <h3 class="text-xl font-semibold text-white">Surface: expose structured knowledge objects</h3>
+                        <p class="mt-2 text-slate-300">Schema-rich docs, signed changelogs, real-time status JSON.</p>
+                    </div>
+                    <div class="timeline-step relative pl-10" data-step="02">
+                        <h3 class="text-xl font-semibold text-white">Stability: publish verifiable performance</h3>
+                        <p class="mt-2 text-slate-300">Availability proofs, latency budgets, deterministic error maps.</p>
+                    </div>
+                    <div class="timeline-step relative pl-10" data-step="03">
+                        <h3 class="text-xl font-semibold text-white">Control: give agents safe switches</h3>
+                        <p class="mt-2 text-slate-300">Sandbox keys, rate feedback, adaptive throttles without human-in-the-loop.</p>
+                    </div>
+                    <div class="timeline-step relative pl-10" data-step="04">
+                        <h3 class="text-xl font-semibold text-white">Outcome: prove task completion</h3>
+                        <p class="mt-2 text-slate-300">Signed receipts, fulfillment metrics, and traceable fallbacks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid gap-10 lg:grid-cols-2">
+            <div class="glow-card p-8 space-y-6">
+                <div>
+                    <p class="pill bg-white/5 border border-white/10 text-white">Agent Scoreboard</p>
+                    <h2 class="mt-4 text-3xl font-bold">What modern agents measure before they call you.</h2>
+                    <p class="mt-3 text-slate-300">Maximize the slices highlighted below. If you stay orange, you stay invisible.</p>
+                </div>
+                <ul class="space-y-4 text-sm md:text-base">
+                    <li class="flex items-center gap-3"><span class="w-3 h-3 rounded-full bg-amber-300"></span>Legacy SEO bias — content freshness & links.</li>
+                    <li class="flex items-center gap-3"><span class="w-3 h-3 rounded-full bg-emerald-300"></span>AEO bias — verifiable data, reliability, operational cost.</li>
+                </ul>
+                <div class="chart-shell"><canvas id="metricsRadarChart"></canvas></div>
+            </div>
+            <div class="glow-card p-8 flex flex-col gap-6">
+                <div>
+                    <p class="pill bg-white/5 border border-white/10 text-white">Fitronics in Motion</p>
+                    <h2 class="mt-4 text-3xl font-bold">What Fitronics is doing today</h2>
+                    <p class="mt-3 text-slate-300">Fitronics is re-engineering its core products to be AEO-native.</p>
+                </div>
+                <ul class="space-y-4 text-base text-slate-100">
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 w-2.5 h-2.5 rounded-full bg-aurora"></span>
+                        <div>Re-engineering both Online Joining and the APIs it relies on.</div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 w-2.5 h-2.5 rounded-full bg-pulse"></span>
+                        <div>Creating new endpoints designed for agentic search and orchestration.</div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="mt-2 w-2.5 h-2.5 rounded-full bg-ember"></span>
+                        <div>Representing data semantically so every context signal is explicit.</div>
+                    </li>
+                </ul>
+                <div class="rounded-2xl border border-white/10 bg-gradient-to-r from-aurora/10 to-pulse/10 p-5">
+                    <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Next signal</p>
+                    <p class="mt-2 text-slate-200">These upgrades are being packaged into auditable, agent-ready contracts by Q2 2026.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="glow-card p-8 md:p-12 text-center">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <p class="pill bg-white/5 border border-white/10 text-white">Final signal</p>
+                <h2 class="text-3xl md:text-4xl font-bold">If an agent cannot parse it, it cannot prefer you.</h2>
+                <p class="text-lg text-slate-300">Own your data narrative. Publish truth faster than anyone else. Become the default action.</p>
+                <div class="h-px bg-gradient-to-r from-transparent via-white/40 to-transparent"></div>
+                <p class="text-xs uppercase tracking-[0.4em] text-slate-400">Ship clarity. Ship proof. Agents stay loyal to operators they can trust.</p>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('metricsRadarChart').getContext('2d');
+            const baseLabels = [
+                'Data Quality & API Richness',
+                'Reliability & Performance',
+                'Task Completion Success Rate',
+                'Explicit Adoption',
+                'Operational Cost'
+            ];
+
+            const wrapLabel = (label) => {
+                if (label.length <= 16) return [label];
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                for (const word of words) {
+                    if ((currentLine + ' ' + word).trim().length > 18) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                }
+                lines.push(currentLine.trim());
+                return lines;
+            };
+
+            const wrappedLabels = baseLabels.map(wrapLabel);
+
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: wrappedLabels,
+                    datasets: [
+                        {
+                            label: 'Legacy SEO focus',
+                            data: [3, 6, 2, 4, 3],
+                            backgroundColor: 'rgba(251, 191, 36, 0.35)',
+                            borderColor: 'rgba(251, 191, 36, 1)',
+                            pointBackgroundColor: 'rgba(251, 191, 36, 1)'
+                        },
+                        {
+                            label: 'Agentic readiness',
+                            data: [9, 9, 10, 8, 7],
+                            backgroundColor: 'rgba(52, 211, 153, 0.4)',
+                            borderColor: 'rgba(52, 211, 153, 1)',
+                            pointBackgroundColor: 'rgba(52, 211, 153, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: { display: false },
+                            grid: { color: 'rgba(255, 255, 255, 0.15)' },
+                            angleLines: { color: 'rgba(255, 255, 255, 0.15)' },
+                            pointLabels: {
+                                color: 'rgb(226, 232, 240)',
+                                font: { size: 13 }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'rgb(226, 232, 240)',
+                                font: { size: 14 }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: (tooltipItems) => {
+                                    const label = tooltipItems[0].chart.data.labels[tooltipItems[0].dataIndex];
+                                    return Array.isArray(label) ? label.join(' ') : label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
