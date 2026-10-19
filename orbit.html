@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbit by Intelligent Counting | Visitor Journey Mapping</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        if (typeof tailwind !== 'undefined') {
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ['Inter', 'sans-serif'],
+                            mono: ['JetBrains Mono', 'monospace'],
+                        },
+                        colors: {
+                            ic: {
+                                navy: '#0a2239',
+                                blue: '#155b96',
+                                orange: '#e86c2c',
+                                teal: '#4ab6c4',
+                                tableHeader: '#d4eef2',
+                                z1: '#4a76a0',
+                                z2: '#ee8822',
+                                z3: '#d9534f',
+                                z4: '#6fb1a8',
+                                z5: '#529b4a'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .brand-left-bar {
+            background: linear-gradient(180deg, #0f4c81 0%, #6b3fa0 50%, #e86c2c 100%);
+        }
+        .hero-mesh {
+            background-color: #081c30;
+            background-image: 
+                radial-gradient(at 85% 15%, rgba(21, 91, 150, 0.35) 0px, transparent 50%),
+                radial-gradient(at 15% 85%, rgba(232, 108, 44, 0.18) 0px, transparent 50%);
+        }
+        .chord-ribbon {
+            transition: opacity 0.25s ease, filter 0.25s ease;
+            cursor: pointer;
+        }
+        .chord-ribbon:hover {
+            opacity: 0.95 !important;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+        .app-shadow {
+            box-shadow: 0 25px 50px -12px rgba(10, 34, 57, 0.14), 0 0 0 1px rgba(15, 23, 42, 0.08);
+        }
+
+        /* =====================================================================
+           BULLETPROOF CSS-FIRST TAB & MODAL ENGINE (Works even without JS/CDN)
+           ===================================================================== */
+        .portal-radio, .modal-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Hide all portal panels by default */
+        .portal-panel {
+            display: none;
+        }
+
+        /* Show active panel based on checked radio input */
+        #state-chord:checked ~ .portal-wrapper #panel-chord { display: block; }
+        #state-sankey:checked ~ .portal-wrapper #panel-sankey { display: block; }
+        #state-table:checked ~ .portal-wrapper #panel-table { display: block; }
+        #state-timeline:checked ~ .portal-wrapper #panel-timeline { display: block; }
+
+        /* Style active top tab buttons */
+        .top-tab-label {
+            cursor: pointer;
+            user-select: none;
+            background-color: transparent;
+            color: #475569;
+        }
+        .top-tab-label:hover {
+            background-color: #f1f5f9;
+        }
+        #state-chord:checked ~ .portal-header-bar label[for="state-chord"],
+        #state-sankey:checked ~ .portal-header-bar label[for="state-sankey"],
+        #state-table:checked ~ .portal-header-bar label[for="state-table"],
+        #state-timeline:checked ~ .portal-header-bar label[for="state-timeline"] {
+            background-color: #155b96 !important;
+            color: #ffffff !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        /* Highlight active left sidebar icon ring */
+        #state-chord:checked ~ .portal-wrapper .side-icon-chord,
+        #state-sankey:checked ~ .portal-wrapper .side-icon-sankey,
+        #state-table:checked ~ .portal-wrapper .side-icon-table,
+        #state-timeline:checked ~ .portal-wrapper .side-icon-timeline {
+            outline: 3px solid #e86c2c;
+            outline-offset: 2px;
+            transform: scale(1.08);
+        }
+
+        /* Pure CSS Pitch Modal Toggle */
+        .pitch-modal-backdrop {
+            display: none;
+        }
+        #toggle-pitch-modal:checked ~ .pitch-modal-backdrop {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-800 antialiased pl-2.5">
+
+    <!-- Pure CSS Checkbox for Colleague Pitch Modal -->
+    <input type="checkbox" id="toggle-pitch-modal" class="modal-checkbox">
+
+    <!-- Signature Intelligent Counting Left Gradient Border -->
+    <div class="fixed top-0 left-0 bottom-0 w-2.5 brand-left-bar z-50"></div>
+
+    <!-- Top Internal Colleague Bar -->
+    <div class="bg-slate-900 text-slate-300 text-xs py-2 px-6 border-b border-slate-800 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center space-x-2.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="font-semibold text-white tracking-wide">INTERNAL COLLEAGUE PREVIEW</span>
+            <span class="text-slate-600">|</span>
+            <span class="text-slate-400">Orbit — Visitor Journey Mapping (IC Ver 8.0)</span>
+        </div>
+        <label for="toggle-pitch-modal" class="cursor-pointer text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1.5 transition">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <span class="underline underline-offset-4">Open 30-Second Colleague Pitch Cheat-Sheet</span>
+        </label>
+    </div>
+
+    <!-- Main Sticky Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <!-- Intelligent Counting + Orbit Logo Lockup -->
+            <div class="flex items-center space-x-5">
+                <a href="#" class="flex items-center space-x-3 group">
+                    <svg class="w-11 h-11 shrink-0" viewBox="0 0 48 48" fill="none">
+                        <circle cx="24" cy="24" r="19" stroke="#155b96" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 6"/>
+                        <circle cx="24" cy="24" r="15" stroke="#e86c2c" stroke-width="3" stroke-linecap="round" stroke-dasharray="1.5 5" transform="rotate(45 24 24)"/>
+                        <circle cx="24" cy="24" r="11" stroke="#6b3fa0" stroke-width="2" stroke-linecap="round" stroke-dasharray="1 4"/>
+                    </svg>
+                    <div class="flex flex-col leading-none">
+                        <span class="text-lg font-extrabold tracking-tight text-ic-navy">intelligent</span>
+                        <span class="text-lg font-extrabold tracking-tight text-ic-navy">counting<span class="text-ic-orange">.</span></span>
+                    </div>
+                </a>
+                <div class="h-7 w-[1px] bg-slate-200 hidden sm:block"></div>
+                <div class="hidden sm:block">
+                    <span class="text-lg font-extrabold text-ic-blue tracking-tight block leading-none">Orbit</span>
+                    <span class="text-[11px] font-bold text-ic-orange uppercase tracking-wider">Visitor Journey Mapping</span>
+                </div>
+            </div>
+
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+                <a href="#the-story" class="hover:text-ic-blue transition">The Story</a>
+                <a href="#interactive-suite" class="hover:text-ic-blue transition">Interactive Ver 8.0 UI</a>
+                <a href="#privacy-architecture" class="hover:text-ic-blue transition">GDPR &amp; Edge AI</a>
+                <a href="#hardware-specs" class="hover:text-ic-blue transition">Hardware Specs</a>
+            </nav>
+
+            <a href="#interactive-suite" class="bg-ic-blue hover:bg-ic-navy text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-sm transition flex items-center gap-2">
+                <span>Launch Live Demo</span>
+                <svg class="w-4 h-4 text-ic-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+            </a>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-mesh text-white py-20 lg:py-24 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-12 gap-12 items-center">
+                <!-- Left Narrative -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center space-x-2 bg-white/10 border border-white/15 rounded-full px-3.5 py-1 text-xs font-semibold text-sky-300">
+                        <span>An Evolutionary Step in Visitor Analytics</span>
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.08]">
+                        Go Beyond the Doorway.<br/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-teal-300 to-orange-400">Map the Whole Journey.</span>
+                    </h1>
+
+                    <p class="text-lg text-slate-300 leading-relaxed max-w-2xl">
+                        Entrance counters tell you how many people arrived. <strong class="text-white">Orbit</strong> shows you how they experience your building—enabling <span class="text-sky-300 font-semibold">object-level tracking</span> between zones to visualise visitor journeys, understand flow patterns, and optimise movement with <span class="text-emerald-300 font-semibold">zero GDPR risk</span>.
+                    </p>
+
+                    <div class="grid sm:grid-cols-3 gap-3.5 pt-2">
+                        <div class="bg-white/[0.06] border border-white/10 rounded-xl p-4">
+                            <div class="text-ic-orange font-bold text-sm">Zone-to-Zone Flow</div>
+                            <p class="text-xs text-slate-300 mt-1">Track movements across Reception, Cafe, Shop &amp; Galleries.</p>
+                        </div>
+                        <div class="bg-white/[0.06] border border-white/10 rounded-xl p-4">
+                            <div class="text-emerald-400 font-bold text-sm">100% Privacy-Safe</div>
+                            <p class="text-xs text-slate-300 mt-1">Faces/heads masked. No facial recognition. Local GPU processing.</p>
+                        </div>
+                        <div class="bg-white/[0.06] border border-white/10 rounded-xl p-4">
+                            <div class="text-sky-400 font-bold text-sm">PiC Sensor Ready</div>
+                            <p class="text-xs text-slate-300 mt-1">Plugs directly into your existing Intelligent Counting PiC sensors.</p>
+                        </div>
+                    </div>
+
+                    <div class="pt-3 flex flex-wrap gap-4">
+                        <a href="#interactive-suite" class="bg-ic-orange hover:bg-orange-600 text-white font-semibold px-6 py-3.5 rounded-xl shadow-lg transition flex items-center gap-2">
+                            <span>Explore National Visitor Centre Data</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <a href="#the-story" class="bg-white/10 hover:bg-white/15 border border-white/20 text-white font-semibold px-6 py-3.5 rounded-xl transition">
+                            4 Strategic Pillars
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Hero Card: Clean Light-Mode Preview Card -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white text-slate-800 rounded-2xl p-6 shadow-2xl border border-slate-200">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-ic-teal"></span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500">National Visitor Centre • Live Snapshot</span>
+                            </div>
+                            <span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold px-2.5 py-0.5 rounded-full">
+                                GDPR Safe • Masked
+                            </span>
+                        </div>
+
+                        <!-- Zone Mini-Pills -->
+                        <div class="grid grid-cols-2 gap-2.5 mb-4">
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 flex items-center space-x-3">
+                                <span class="w-8 h-8 rounded-full bg-ic-z4 text-white font-bold text-xs flex items-center justify-center shrink-0">Z4</span>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">Reception</div>
+                                    <div class="text-[11px] text-slate-500">In: 152 • Out: 92</div>
+                                    <div class="text-[11px] font-semibold text-teal-700">244 movements</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 flex items-center space-x-3">
+                                <span class="w-8 h-8 rounded-full bg-ic-z2 text-white font-bold text-xs flex items-center justify-center shrink-0">Z2</span>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">Cafe</div>
+                                    <div class="text-[11px] text-slate-500">In: 86 • Out: 79</div>
+                                    <div class="text-[11px] font-semibold text-orange-600">165 movements</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 flex items-center space-x-3">
+                                <span class="w-8 h-8 rounded-full bg-ic-z5 text-white font-bold text-xs flex items-center justify-center shrink-0">Z5</span>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">Shop</div>
+                                    <div class="text-[11px] text-slate-500">In: 42 • Out: 36</div>
+                                    <div class="text-[11px] font-semibold text-emerald-700">78 movements</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 border border-slate-200/80 rounded-xl p-3 flex items-center space-x-3">
+                                <span class="w-8 h-8 rounded-full bg-ic-z1 text-white font-bold text-xs flex items-center justify-center shrink-0">Z1</span>
+                                <div>
+                                    <div class="text-xs font-bold text-slate-900">Total Site</div>
+                                    <div class="text-[11px] text-slate-500">In: 0 • Out: 75</div>
+                                    <div class="text-[11px] font-semibold text-ic-blue">75 movements</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Detection Log Snippet -->
+                        <div class="rounded-xl overflow-hidden border border-slate-200">
+                            <div class="bg-ic-tableHeader px-3.5 py-2 text-[11px] font-bold text-slate-800 flex justify-between">
+                                <span>Identity (Anonymous UUID)</span>
+                                <span>Appear Time • Zone</span>
+                            </div>
+                            <div class="divide-y divide-slate-100 text-[11px] bg-white font-mono">
+                                <div class="px-3.5 py-2 flex justify-between items-center">
+                                    <span class="text-slate-700 truncate max-w-[190px]">85bbf949-22e6-4d6e-Af10-2219a574129a</span>
+                                    <span class="text-slate-600 font-sans font-medium">10:46 • Reception</span>
+                                </div>
+                                <div class="px-3.5 py-2 flex justify-between items-center bg-slate-50/60">
+                                    <span class="text-slate-700 truncate max-w-[190px]">85bbf949-22e6-4d6e-Af10-2219a574129a</span>
+                                    <span class="text-slate-600 font-sans font-medium">11:01 • Reception</span>
+                                </div>
+                                <div class="px-3.5 py-2 flex justify-between items-center">
+                                    <span class="text-slate-700 truncate max-w-[190px]">B228396c-Ed03-405c-82a5-C28e821805bf</span>
+                                    <span class="text-slate-600 font-sans font-medium">10:10 • Cafe</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 1: THE 4 STRATEGIC PILLARS -->
+    <section id="the-story" class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-3xl mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-ic-orange">Strategic Positioning</span>
+                <h2 class="text-3xl font-extrabold text-ic-navy mt-1">
+                    Turning Footfall into Complete Spatial Clarity
+                </h2>
+                <p class="text-slate-600 mt-2">
+                    Designed for museums, libraries, theme parks, heritage sites, and multi-zone visitor attractions where understanding how people navigate your space is critical.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-6">
+                    <div class="flex items-center space-x-2 text-ic-blue font-bold text-sm mb-2">
+                        <span>✓</span>
+                        <span>What it technically is</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Tracking individual visitor journeys</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Tracks visitor movement between zones and areas to build a clear picture of how people navigate through a building.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-6">
+                    <div class="flex items-center space-x-2 text-ic-blue font-bold text-sm mb-2">
+                        <span>✓</span>
+                        <span>What it means to you</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Understanding behaviour inside</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        See how visitors move through your space, which areas they visit, and how they flow between different zones.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-6">
+                    <div class="flex items-center space-x-2 text-ic-blue font-bold text-sm mb-2">
+                        <span>✓</span>
+                        <span>Core emotional benefit</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Clarity without compromising privacy</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Faces and heads are masked, no personal data is collected, and all processing is performed locally on the GPU.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50/70 border border-slate-200/90 rounded-2xl p-6">
+                    <div class="flex items-center space-x-2 text-ic-blue font-bold text-sm mb-2">
+                        <span>✓</span>
+                        <span>Strategic positioning</span>
+                    </div>
+                    <h3 class="text-base font-extrabold text-slate-900">Understand how visitors actually move</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Go beyond counting visitors at entrances. Understand their journeys through your space and turn movement patterns into actionable insights.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================================
+         SECTION 2: AUTHENTIC LIGHT-MODE INTELLIGENT COUNTING VER 8.0 APPLICATION
+         (Driven by Pure CSS Radio State Machine + Progressive JS Enhancement)
+         ============================================================================ -->
+    <section id="interactive-suite" class="py-16 bg-[#eef2f6] border-b border-slate-300">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <!-- CSS STATE MACHINE RADIO INPUTS (Must remain direct siblings of .portal-header-bar and .portal-wrapper) -->
+            <input type="radio" name="orbit-portal-tab" id="state-chord" class="portal-radio" checked>
+            <input type="radio" name="orbit-portal-tab" id="state-sankey" class="portal-radio">
+            <input type="radio" name="orbit-portal-tab" id="state-table" class="portal-radio">
+            <input type="radio" name="orbit-portal-tab" id="state-timeline" class="portal-radio">
+
+            <!-- Section Header + Top Tab Switcher Labels -->
+            <div class="portal-header-bar flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-4">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-widest text-ic-blue">Live Product Walkthrough</span>
+                    <h2 class="text-3xl font-extrabold text-ic-navy mt-1">
+                        Intelligent Counting Portal (Ver 8.0) — Visitor Journey Module
+                    </h2>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Click the top tabs, the left sidebar icons (<strong class="text-slate-800">CALENDAR, TABLE, CHART, EXPORT, RUN</strong>), or <strong class="text-slate-800">TRACK A VISITOR</strong> to switch views.
+                    </p>
+                </div>
+
+                <!-- Pure CSS Label Pills -->
+                <div class="flex flex-wrap gap-1.5 bg-white p-1.5 rounded-xl border border-slate-300 shadow-sm">
+                    <label for="state-chord" class="top-tab-label px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        1. Zone Chord &amp; Cards
+                    </label>
+                    <label for="state-sankey" class="top-tab-label px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        2. Sequential Flow (Sankey)
+                    </label>
+                    <label for="state-table" class="top-tab-label px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        3. Detection Records Table
+                    </label>
+                    <label for="state-timeline" class="top-tab-label px-3.5 py-2 rounded-lg text-xs font-bold transition">
+                        4. Track a Visitor Timeline
+                    </label>
+                </div>
+            </div>
+
+            <!-- AUTHENTIC INTELLIGENT COUNTING VER 8.0 BROWSER WINDOW (LIGHT MODE) -->
+            <div class="portal-wrapper bg-white rounded-2xl app-shadow overflow-hidden border border-slate-300">
+
+                <!-- Portal Top Header Bar -->
+                <div class="bg-[#f8f9fa] border-b border-slate-200 px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-9 h-9" viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="19" stroke="#155b96" stroke-width="3.5" stroke-linecap="round" stroke-dasharray="2 6"/>
+                            <circle cx="24" cy="24" r="15" stroke="#e86c2c" stroke-width="3" stroke-linecap="round" stroke-dasharray="1.5 5" transform="rotate(45 24 24)"/>
+                        </svg>
+                        <div class="leading-none">
+                            <div class="text-sm font-extrabold text-ic-navy">intelligent</div>
+                            <div class="text-sm font-extrabold text-ic-navy">counting<span class="text-ic-orange">.</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Center: Venue Selector Dropdown -->
+                    <div class="bg-white border border-slate-200 rounded-lg px-5 py-2 shadow-sm flex items-center space-x-4">
+                        <span class="text-sm font-normal tracking-wide text-slate-700 uppercase">NATIONAL VISITOR CENTRE</span>
+                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+
+                    <!-- Right: Menu Button -->
+                    <div class="border border-slate-300 bg-white rounded px-3 py-1.5 text-xs font-medium text-slate-600 flex items-center space-x-2">
+                        <span>MENU</span>
+                        <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </div>
+                </div>
+
+                <!-- Portal Body with Left Sidebar & Main Canvas -->
+                <div class="flex min-h-[590px]">
+
+                    <!-- Left Icon Sidebar (Bound directly to radio labels so every icon works natively) -->
+                    <div class="w-20 bg-white border-r border-slate-200 py-5 flex flex-col items-center space-y-6 shrink-0 select-none">
+                        <label for="state-table" title="View Detection Log by Date" class="cursor-pointer group flex flex-col items-center">
+                            <div class="w-9 h-9 rounded-full bg-[#3b6998] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <span class="text-[9px] font-semibold text-slate-600 mt-1 uppercase">CALENDAR</span>
+                        </label>
+
+                        <label for="state-table" title="Detection Records Table" class="cursor-pointer group flex flex-col items-center">
+                            <div class="side-icon-table w-9 h-9 rounded-full bg-[#e69138] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <span class="text-[9px] font-semibold text-slate-600 mt-1 uppercase">TABLE</span>
+                        </label>
+
+                        <label for="state-chord" title="Chord & Zone Flow Chart" class="cursor-pointer group flex flex-col items-center">
+                            <div class="side-icon-chord w-9 h-9 rounded-full bg-[#4c9a92] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            </div>
+                            <span class="text-[9px] font-semibold text-slate-600 mt-1 uppercase">CHART</span>
+                        </label>
+
+                        <label for="state-sankey" title="Sequential Sankey Flow" class="cursor-pointer group flex flex-col items-center">
+                            <div class="side-icon-sankey w-9 h-9 rounded-full bg-[#6b3fa0] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            </div>
+                            <span class="text-[9px] font-semibold text-slate-600 mt-1 uppercase">EXPORT</span>
+                        </label>
+
+                        <label for="state-timeline" title="Run Visitor Timeline Trace" class="cursor-pointer group flex flex-col items-center">
+                            <div class="side-icon-timeline w-9 h-9 rounded-full bg-[#4ab6c4] text-white flex items-center justify-center shadow-sm group-hover:scale-105 transition">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <span class="text-[9px] font-semibold text-slate-600 mt-1 uppercase">RUN</span>
+                        </label>
+                    </div>
+
+                    <!-- Main White Portal Content Area -->
+                    <div class="flex-1 p-6 lg:p-8 bg-white">
+                        <!-- Breadcrumb Sub-header -->
+                        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                            <div class="flex items-center space-x-2 text-sm">
+                                <span class="w-0.5 h-4 bg-rose-600 inline-block"></span>
+                                <label for="state-chord" class="text-slate-600 font-normal cursor-pointer hover:text-slate-900">COUNT METRICS</label>
+                                <label for="state-table" class="text-[#38a3b8] font-medium cursor-pointer hover:underline">VISITOR JOURNEY</label>
+                            </div>
+
+                            <div class="flex flex-col items-end space-y-2">
+                                <div class="text-[10px] font-bold text-slate-700 tracking-wide space-x-1">
+                                    <label for="state-chord" class="cursor-pointer hover:underline">HOME PAGE</label>
+                                    <span>|</span>
+                                    <label for="state-sankey" class="cursor-pointer hover:underline">GO BACK</label>
+                                    <span>|</span>
+                                    <label for="toggle-pitch-modal" class="cursor-pointer hover:underline">HELP</label>
+                                </div>
+                                <label for="state-timeline" class="cursor-pointer border-2 border-[#38a3b8] text-slate-800 hover:bg-[#38a3b8] hover:text-white text-xs font-semibold px-4 py-1.5 rounded-full transition select-none">
+                                    TRACK A VISITOR
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- ========================================================= -->
+                        <!-- PANEL 1: CHORD DIAGRAM & ZONE CARDS                       -->
+                        <!-- ========================================================= -->
+                        <div id="panel-chord" class="portal-panel space-y-8">
+                            <div class="text-center">
+                                <h3 class="text-lg font-normal text-slate-800">Visitor Journey Analytics On: <span class="font-semibold">07/10/2026</span> — Multi-Zone Chord Map</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">Bidirectional zone-to-zone flow volume across all 5 active zones at the National Visitor Centre.</p>
+                            </div>
+
+                            <!-- High-Precision Light-Mode SVG Chord Diagram -->
+                            <div class="flex justify-center items-center py-2">
+                                <svg viewBox="0 0 560 470" class="w-full max-w-[520px] h-auto select-none">
+                                    <path d="M 285 92 A 143 143 0 0 1 365 120 Q 275 235 176 322 A 143 143 0 0 1 142 260 Q 255 215 285 92 Z" 
+                                          fill="#4a76a0" fill-opacity="0.88" stroke="#385d80" stroke-width="1" class="chord-ribbon">
+                                        <title>Z1 (Total Site) → Z4 (Reception): Major Primary Flow</title>
+                                    </path>
+                                    <path d="M 368 123 A 143 143 0 0 1 390 144 Q 320 220 404 307 A 143 143 0 0 1 388 328 Q 290 230 368 123 Z" 
+                                          fill="#4a76a0" fill-opacity="0.85" stroke="#385d80" stroke-width="1" class="chord-ribbon">
+                                        <title>Z1 (Total Site) → Z2 (Cafe)</title>
+                                    </path>
+                                    <path d="M 396 150 A 143 143 0 0 1 422 252 Q 280 250 142 256 A 143 143 0 0 1 158 172 Q 280 230 396 150 Z" 
+                                          fill="#fdf5ea" fill-opacity="0.7" stroke="#ee8822" stroke-width="0.9" class="chord-ribbon">
+                                        <title>Z2 (Cafe) ↔ Z4 (Reception): 165 Cafe movements</title>
+                                    </path>
+                                    <path d="M 180 132 A 143 143 0 0 1 215 106 Q 260 225 198 346 A 143 143 0 0 1 178 326 Q 235 230 180 132 Z" 
+                                          fill="#f3f9f2" fill-opacity="0.65" stroke="#529b4a" stroke-width="0.9" class="chord-ribbon">
+                                        <title>Z5 (Shop) ↔ Z4 (Reception): 78 Shop movements</title>
+                                    </path>
+                                    <path d="M 218 104 A 143 143 0 0 1 236 97 Q 280 215 415 280 A 143 143 0 0 1 405 302 Q 270 225 218 104 Z" 
+                                          fill="#f3f9f2" fill-opacity="0.6" stroke="#529b4a" stroke-width="0.9" class="chord-ribbon">
+                                        <title>Z5 (Shop) ↔ Z2 (Cafe)</title>
+                                    </path>
+
+                                    <path d="M 326 372 Q 280 280 202 350" fill="none" stroke="#d9534f" stroke-width="1.3"/>
+                                    <path d="M 332 370 Q 300 240 418 258" fill="none" stroke="#d9534f" stroke-width="1.3"/>
+
+                                    <!-- OUTER ZONE ARCS -->
+                                    <path d="M 285 80 A 155 155 0 0 1 407 146" fill="none" stroke="#4a76a0" stroke-width="20"/>
+                                    <path d="M 417 162 A 155 155 0 0 1 384 350" fill="none" stroke="#ee8822" stroke-width="20"/>
+                                    <path d="M 345 376 A 155 155 0 0 1 322 385" fill="none" stroke="#d9534f" stroke-width="20"/>
+                                    <path d="M 308 388 A 155 155 0 0 1 155 144" fill="none" stroke="#6fb1a8" stroke-width="20"/>
+                                    <path d="M 167 129 A 155 155 0 0 1 272 80" fill="none" stroke="#529b4a" stroke-width="20"/>
+
+                                    <!-- LEADER LINES & CALLOUT BADGES -->
+                                    <line x1="352" y1="90" x2="364" y2="64" stroke="#475569" stroke-width="1.5"/>
+                                    <circle cx="372" cy="44" r="20" fill="#4a76a0" stroke="#2c4762" stroke-width="1.5"/>
+                                    <text x="372" y="49" text-anchor="middle" class="text-xs font-bold fill-white">Z1</text>
+
+                                    <line x1="448" y1="255" x2="475" y2="260" stroke="#475569" stroke-width="1.5"/>
+                                    <circle cx="498" cy="264" r="20" fill="#ee8822" stroke="#9c540d" stroke-width="1.5"/>
+                                    <text x="498" y="269" text-anchor="middle" class="text-xs font-bold fill-white">Z2</text>
+
+                                    <line x1="336" y1="392" x2="348" y2="416" stroke="#475569" stroke-width="1.5"/>
+                                    <circle cx="358" cy="436" r="20" fill="#d9534f" stroke="#8a2a27" stroke-width="1.5"/>
+                                    <text x="358" y="441" text-anchor="middle" class="text-xs font-bold fill-white">Z3</text>
+
+                                    <line x1="146" y1="342" x2="124" y2="358" stroke="#475569" stroke-width="1.5"/>
+                                    <circle cx="105" cy="372" r="20" fill="#6fb1a8" stroke="#3d6b65" stroke-width="1.5"/>
+                                    <text x="105" y="377" text-anchor="middle" class="text-xs font-bold fill-slate-900">Z4</text>
+
+                                    <line x1="208" y1="88" x2="196" y2="62" stroke="#475569" stroke-width="1.5"/>
+                                    <circle cx="186" cy="42" r="20" fill="#529b4a" stroke="#2e5c29" stroke-width="1.5"/>
+                                    <text x="186" y="47" text-anchor="middle" class="text-xs font-bold fill-white">Z5</text>
+                                </svg>
+                            </div>
+
+                            <!-- 5 Zone Cards Container -->
+                            <div class="bg-[#f8fafc] border border-slate-200/90 rounded-2xl p-5">
+                                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-center space-x-4 shadow-sm">
+                                        <div class="w-11 h-11 rounded-full bg-ic-z1 border border-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0">Z1</div>
+                                        <div class="text-center flex-1">
+                                            <div class="text-sm font-bold text-slate-900">Total Site</div>
+                                            <div class="text-xs text-slate-500 mt-1">Inbound: 0 · Outbound: 75</div>
+                                            <div class="text-xs text-slate-600 mt-0.5">Total movements: 75</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-center space-x-4 shadow-sm">
+                                        <div class="w-11 h-11 rounded-full bg-ic-z2 border border-slate-700 text-slate-900 font-bold text-sm flex items-center justify-center shrink-0">Z2</div>
+                                        <div class="text-center flex-1">
+                                            <div class="text-sm font-bold text-slate-900">Cafe</div>
+                                            <div class="text-xs text-slate-500 mt-1">Inbound: 86 · Outbound: 79</div>
+                                            <div class="text-xs text-slate-600 mt-0.5">Total movements: 165</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-center space-x-4 shadow-sm">
+                                        <div class="w-11 h-11 rounded-full bg-ic-z3 border border-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0">Z3</div>
+                                        <div class="text-center flex-1">
+                                            <div class="text-sm font-bold text-slate-900">Exhibition gallery</div>
+                                            <div class="text-xs text-slate-500 mt-1">Inbound: 7 · Outbound: 5</div>
+                                            <div class="text-xs text-slate-600 mt-0.5">Total movements: 12</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-center space-x-4 shadow-sm">
+                                        <div class="w-11 h-11 rounded-full bg-ic-z4 border border-slate-700 text-slate-900 font-bold text-sm flex items-center justify-center shrink-0">Z4</div>
+                                        <div class="text-center flex-1">
+                                            <div class="text-sm font-bold text-slate-900">Reception</div>
+                                            <div class="text-xs text-slate-500 mt-1">Inbound: 152 · Outbound: 92</div>
+                                            <div class="text-xs text-slate-600 mt-0.5">Total movements: 244</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white border border-slate-200/80 rounded-xl p-4 flex items-center space-x-4 shadow-sm">
+                                        <div class="w-11 h-11 rounded-full bg-ic-z5 border border-slate-700 text-white font-bold text-sm flex items-center justify-center shrink-0">Z5</div>
+                                        <div class="text-center flex-1">
+                                            <div class="text-sm font-bold text-slate-900">Shop</div>
+                                            <div class="text-xs text-slate-500 mt-1">Inbound: 42 · Outbound: 36</div>
+                                            <div class="text-xs text-slate-600 mt-0.5">Total movements: 78</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ========================================================= -->
+                        <!-- PANEL 2: SEQUENTIAL SANKEY FLOW                           -->
+                        <!-- ========================================================= -->
+                        <div id="panel-sankey" class="portal-panel space-y-6">
+                            <div class="bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-xs text-slate-700 flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    Processed <strong>358 identities</strong>. <strong>357</strong> had a journey beginning at <strong>Total Site</strong>. The originating journeys contain <strong>1,422 zone-to-zone movements</strong> across <strong>5 active zones</strong>.
+                                </div>
+                                <span class="font-bold text-ic-blue">Average: 4.0 movements per originating visitor</span>
+                            </div>
+
+                            <div class="text-center">
+                                <h3 class="text-base font-bold text-slate-900">Sequential visitor movements originating from Total Site</h3>
+                                <p class="text-xs text-slate-500">Each column represents the next recorded movement in the visitor journey. Repeated zones may appear in later stages.</p>
+                            </div>
+
+                            <div class="border border-slate-200 rounded-2xl p-6 bg-white overflow-x-auto">
+                                <div class="min-w-[740px]">
+                                    <svg viewBox="0 0 900 310" class="w-full h-auto">
+                                        <text x="40" y="295" class="text-[11px] font-bold fill-slate-600">Origin</text>
+                                        <text x="270" y="295" class="text-[11px] font-bold fill-slate-600">Movement 1</text>
+                                        <text x="530" y="295" class="text-[11px] font-bold fill-slate-600">Movement 2</text>
+                                        <text x="775" y="295" class="text-[11px] font-bold fill-slate-600">Movement 3</text>
+
+                                        <rect x="30" y="25" width="18" height="225" rx="2" fill="#3b76a0"/>
+                                        <text x="56" y="130" class="text-xs font-bold fill-slate-800">Total Site</text>
+                                        <text x="56" y="144" class="text-[11px] fill-slate-500">357 movements</text>
+
+                                        <path d="M 48 100 C 150 100, 170 90, 270 90" stroke="#6fb1a8" stroke-width="136" fill="none" opacity="0.45"/>
+                                        <path d="M 48 192 C 150 192, 170 200, 270 200" stroke="#f6e05e" stroke-width="32" fill="none" opacity="0.55"/>
+                                        <path d="M 48 228 C 150 228, 170 248, 270 248" stroke="#ee8822" stroke-width="30" fill="none" opacity="0.5"/>
+
+                                        <rect x="270" y="22" width="18" height="140" rx="2" fill="#5c9e97"/>
+                                        <text x="295" y="85" class="text-xs font-bold fill-slate-800">Reception</text>
+                                        <text x="295" y="99" class="text-[11px] fill-slate-500">252 movements</text>
+
+                                        <rect x="270" y="182" width="18" height="34" rx="2" fill="#ecc94b"/>
+                                        <text x="295" y="196" class="text-xs font-bold fill-slate-800">No further movement</text>
+                                        <text x="295" y="210" class="text-[11px] fill-slate-500">53 movements</text>
+
+                                        <rect x="270" y="230" width="18" height="34" rx="2" fill="#ee8822"/>
+                                        <text x="295" y="245" class="text-xs font-bold fill-slate-800">Cafe</text>
+                                        <text x="295" y="259" class="text-[11px] fill-slate-500">51 movements</text>
+
+                                        <path d="M 288 50 C 390 50, 420 50, 530 50" stroke="#529b4a" stroke-width="46" fill="none" opacity="0.45"/>
+                                        <path d="M 288 100 C 390 100, 420 115, 530 115" stroke="#ee8822" stroke-width="40" fill="none" opacity="0.45"/>
+                                        <path d="M 288 245 C 390 245, 420 192, 530 192" stroke="#6fb1a8" stroke-width="28" fill="none" opacity="0.45"/>
+
+                                        <rect x="530" y="26" width="18" height="48" rx="2" fill="#529b4a"/>
+                                        <text x="555" y="48" class="text-xs font-bold fill-slate-800">Shop</text>
+                                        <text x="555" y="62" class="text-[11px] fill-slate-500">82 movements</text>
+
+                                        <rect x="530" y="92" width="18" height="44" rx="2" fill="#ee8822"/>
+                                        <text x="555" y="112" class="text-xs font-bold fill-slate-800">Cafe</text>
+                                        <text x="555" y="126" class="text-[11px] fill-slate-500">72 movements</text>
+
+                                        <rect x="530" y="174" width="18" height="34" rx="2" fill="#5c9e97"/>
+                                        <text x="555" y="188" class="text-xs font-bold fill-slate-800">Reception</text>
+                                        <text x="555" y="202" class="text-[11px] fill-slate-500">50 movements</text>
+
+                                        <rect x="530" y="224" width="18" height="6" rx="2" fill="#d9534f"/>
+                                        <text x="555" y="229" class="text-xs font-bold fill-slate-800">Exhibition gallery (2)</text>
+
+                                        <path d="M 548 50 C 650 50, 680 65, 775 65" stroke="#6fb1a8" stroke-width="34" fill="none" opacity="0.45"/>
+                                        <path d="M 548 188 C 650 188, 680 135, 775 135" stroke="#529b4a" stroke-width="24" fill="none" opacity="0.45"/>
+
+                                        <rect x="775" y="42" width="18" height="52" rx="2" fill="#5c9e97"/>
+                                        <text x="800" y="64" class="text-xs font-bold fill-slate-800">Reception</text>
+                                        <text x="800" y="78" class="text-[11px] fill-slate-500">91 movements</text>
+
+                                        <rect x="775" y="120" width="18" height="30" rx="2" fill="#529b4a"/>
+                                        <text x="800" y="134" class="text-xs font-bold fill-slate-800">Shop</text>
+                                        <text x="800" y="148" class="text-[11px] fill-slate-500">46 movements</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ========================================================= -->
+                        <!-- PANEL 3: DETECTION RECORDS TABLE                          -->
+                        <!-- ========================================================= -->
+                        <div id="panel-table" class="portal-panel space-y-6">
+                            <div class="text-center">
+                                <h3 class="text-lg font-normal text-slate-800">Visitor Journey Analytics On: <span class="font-semibold">07/10/2026</span></h3>
+                                <p class="text-xs text-slate-500 mt-1">Click any visitor identity row below to open their individual Journey Timeline Report.</p>
+                            </div>
+
+                            <div class="max-w-3xl mx-auto shadow-md rounded-lg overflow-hidden border border-slate-200">
+                                <table class="w-full text-center text-xs sm:text-sm border-collapse">
+                                    <thead>
+                                        <tr class="bg-ic-tableHeader text-slate-900 font-semibold border-b border-slate-200">
+                                            <th class="py-3.5 px-4 border-r border-slate-200/70">Identity</th>
+                                            <th class="py-3.5 px-4 border-r border-slate-200/70">AppearTime</th>
+                                            <th class="py-3.5 px-4">ZoneName</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-200 bg-white text-slate-700">
+                                        <tr data-uuid="85bbf949-22e6-4d6e-Af10-2219a574129a" class="visitor-row hover:bg-sky-50 cursor-pointer transition">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">85bbf949-22e6-4d6e-Af10-2219a574129a</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 10:46:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Reception</label></td>
+                                        </tr>
+                                        <tr data-uuid="85bbf949-22e6-4d6e-Af10-2219a574129a" class="visitor-row hover:bg-sky-50 cursor-pointer transition bg-slate-50/50">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">85bbf949-22e6-4d6e-Af10-2219a574129a</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 10:46:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Total Site</label></td>
+                                        </tr>
+                                        <tr data-uuid="85bbf949-22e6-4d6e-Af10-2219a574129a" class="visitor-row hover:bg-sky-50 cursor-pointer transition">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">85bbf949-22e6-4d6e-Af10-2219a574129a</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 11:01:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Reception</label></td>
+                                        </tr>
+                                        <tr data-uuid="85bbf949-22e6-4d6e-Af10-2219a574129a" class="visitor-row hover:bg-sky-50 cursor-pointer transition bg-slate-50/50">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">85bbf949-22e6-4d6e-Af10-2219a574129a</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 11:54:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Reception</label></td>
+                                        </tr>
+                                        <tr data-uuid="C265dbba-6dc1-48d3-Bb7c-797236ed6a76" class="visitor-row hover:bg-sky-50 cursor-pointer transition">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">C265dbba-6dc1-48d3-Bb7c-797236ed6a76</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 08:57:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Total Site</label></td>
+                                        </tr>
+                                        <tr data-uuid="D62ee694-4434-4837-Abe1-3b928334ad39" class="visitor-row hover:bg-sky-50 cursor-pointer transition bg-slate-50/50">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">D62ee694-4434-4837-Abe1-3b928334ad39</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 09:42:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Total Site</label></td>
+                                        </tr>
+                                        <tr data-uuid="B228396c-Ed03-405c-82a5-C28e821805bf" class="visitor-row hover:bg-sky-50 cursor-pointer transition">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">B228396c-Ed03-405c-82a5-C28e821805bf</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 10:04:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Reception</label></td>
+                                        </tr>
+                                        <tr data-uuid="B228396c-Ed03-405c-82a5-C28e821805bf" class="visitor-row hover:bg-sky-50 cursor-pointer transition bg-[#d4eef2]/60">
+                                            <td class="py-2.5 px-4 border-r border-slate-100 font-mono text-xs"><label for="state-timeline" class="cursor-pointer block w-full h-full">B228396c-Ed03-405c-82a5-C28e821805bf</label></td>
+                                            <td class="py-2.5 px-4 border-r border-slate-100"><label for="state-timeline" class="cursor-pointer block w-full h-full">07/10/2026 10:10:00</label></td>
+                                            <td class="py-2.5 px-4"><label for="state-timeline" class="cursor-pointer block w-full h-full">Cafe</label></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- ========================================================= -->
+                        <!-- PANEL 4: VISITOR JOURNEY REPORT                           -->
+                        <!-- ========================================================= -->
+                        <div id="panel-timeline" class="portal-panel space-y-5 max-w-4xl mx-auto">
+                            <h3 class="text-center text-lg font-medium text-slate-800">Visitor Journey Report</h3>
+
+                            <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                                <label class="block text-xs font-bold text-slate-700 mb-1.5">Identity:</label>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <input id="visitor-uuid-input" type="text" value="7810f926-af2c-499e-8eeb-b45a77c3a8b3" class="border border-slate-400 rounded px-3 py-1.5 text-xs font-mono text-slate-800 w-72 focus:outline-none focus:border-ic-blue"/>
+                                    <button id="btn-generate-report" type="button" class="border border-[#38a3b8] text-slate-700 hover:bg-[#38a3b8] hover:text-white text-[10px] font-semibold px-3.5 py-1.5 rounded-full uppercase transition">
+                                        GENERATE REPORT
+                                    </button>
+                                    <span id="report-status-badge" class="text-[11px] text-emerald-600 font-medium hidden">✓ Report Updated</span>
+                                </div>
+                            </div>
+
+                            <!-- 5 Grey Metric Boxes -->
+                            <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                                <div class="bg-[#e6e7e9] rounded-lg p-3.5">
+                                    <div class="text-[10px] uppercase text-slate-500 font-medium">FIRST DETECTION</div>
+                                    <div class="text-sm sm:text-base font-bold text-slate-900 mt-1">03/09/2026 08:32</div>
+                                </div>
+                                <div class="bg-[#e6e7e9] rounded-lg p-3.5">
+                                    <div class="text-[10px] uppercase text-slate-500 font-medium">LAST DETECTION</div>
+                                    <div class="text-sm sm:text-base font-bold text-slate-900 mt-1">03/09/2026 12:28</div>
+                                </div>
+                                <div class="bg-[#e6e7e9] rounded-lg p-3.5">
+                                    <div class="text-[10px] uppercase text-slate-500 font-medium">OBSERVED WINDOW</div>
+                                    <div class="text-sm sm:text-base font-bold text-slate-900 mt-1">3h 56m</div>
+                                </div>
+                                <div class="bg-[#e6e7e9] rounded-lg p-3.5">
+                                    <div class="text-[10px] uppercase text-slate-500 font-medium">ZONES VISITED</div>
+                                    <div class="text-sm sm:text-base font-bold text-slate-900 mt-1">2</div>
+                                </div>
+                                <div class="bg-[#e6e7e9] rounded-lg p-3.5 col-span-2 sm:col-span-1">
+                                    <div class="text-[10px] uppercase text-slate-500 font-medium">DETECTIONS</div>
+                                    <div class="text-sm sm:text-base font-bold text-slate-900 mt-1">31</div>
+                                </div>
+                            </div>
+
+                            <!-- Journey Breadcrumb Box -->
+                            <div class="border border-slate-200 rounded-xl p-4 bg-white">
+                                <div class="text-sm font-semibold text-slate-800 mb-1.5">Journey</div>
+                                <div class="text-xs text-slate-700 flex flex-wrap items-center gap-2">
+                                    <span><strong>Reception</strong> <span class="text-slate-500">10:43</span></span>
+                                    <span>→</span>
+                                    <span><strong>Cafe</strong> <span class="text-slate-500">10:44</span></span>
+                                    <span>→</span>
+                                    <span><strong>Reception</strong> <span class="text-slate-500">11:06</span></span>
+                                    <span>→</span>
+                                    <span><strong>Cafe</strong> <span class="text-slate-500">11:07</span></span>
+                                    <span>→</span>
+                                    <span><strong>Reception</strong> <span class="text-slate-500">11:08</span></span>
+                                </div>
+                            </div>
+
+                            <!-- Journey Timeline Step Graph -->
+                            <div class="border border-slate-200 rounded-xl p-5 bg-white">
+                                <div class="text-center text-sm font-medium text-slate-800 mb-3">Journey Timeline</div>
+                                <svg viewBox="0 0 780 210" class="w-full h-auto">
+                                    <line x1="90" y1="35" x2="740" y2="35" stroke="#e2e8f0" stroke-width="1"/>
+                                    <line x1="90" y1="105" x2="740" y2="105" stroke="#e2e8f0" stroke-width="1"/>
+                                    <line x1="90" y1="175" x2="740" y2="175" stroke="#e2e8f0" stroke-width="1"/>
+                                    <line x1="90" y1="15" x2="90" y2="190" stroke="#334155" stroke-width="1.2"/>
+                                    <line x1="90" y1="190" x2="740" y2="190" stroke="#334155" stroke-width="1.2"/>
+
+                                    <text x="80" y="39" text-anchor="end" class="text-[11px] fill-slate-700">Total Site</text>
+                                    <text x="80" y="109" text-anchor="end" class="text-[11px] fill-slate-700">Reception</text>
+                                    <text x="80" y="179" text-anchor="end" class="text-[11px] fill-slate-700">Cafe</text>
+
+                                    <text x="100" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">08:30</text>
+                                    <text x="180" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">09:00</text>
+                                    <text x="260" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">09:30</text>
+                                    <text x="340" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">10:00</text>
+                                    <text x="420" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">10:30</text>
+                                    <text x="500" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">11:00</text>
+                                    <text x="580" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">11:30</text>
+                                    <text x="660" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">12:00</text>
+                                    <text x="735" y="204" text-anchor="middle" class="text-[10px] fill-slate-600">12:30</text>
+
+                                    <polyline fill="none" stroke="#9abfd9" stroke-width="1.6"
+                                        points="105,35 175,35 228,35 262,35 365,35 455,105 455,35 458,175 515,175 518,105 520,35 523,175 528,35 538,105 548,35 558,105 566,35 590,105 604,105 608,35 614,105 642,35 702,35 735,35"/>
+
+                                    <g fill="#1b8a1b">
+                                        <circle cx="105" cy="35" r="3.8"/><circle cx="173" cy="35" r="3.8"/><circle cx="177" cy="35" r="3.8"/>
+                                        <circle cx="228" cy="35" r="3.8"/><circle cx="260" cy="35" r="3.8"/><circle cx="265" cy="35" r="3.8"/>
+                                        <circle cx="362" cy="35" r="3.8"/><circle cx="367" cy="35" r="3.8"/><circle cx="455" cy="35" r="3.8"/>
+                                        <circle cx="520" cy="35" r="3.8"/><circle cx="528" cy="35" r="3.8"/><circle cx="548" cy="35" r="3.8"/>
+                                        <circle cx="562" cy="35" r="3.8"/><circle cx="568" cy="35" r="3.8"/><circle cx="608" cy="35" r="3.8"/>
+                                        <circle cx="642" cy="35" r="3.8"/><circle cx="702" cy="35" r="3.8"/><circle cx="732" cy="35" r="3.8"/><circle cx="736" cy="35" r="3.8"/>
+                                    </g>
+                                    <g fill="#ff7700">
+                                        <circle cx="455" cy="105" r="3.8"/><circle cx="518" cy="105" r="3.8"/><circle cx="525" cy="105" r="3.8"/>
+                                        <circle cx="538" cy="105" r="3.8"/><circle cx="558" cy="105" r="3.8"/><circle cx="590" cy="105" r="3.8"/>
+                                        <circle cx="600" cy="105" r="3.8"/><circle cx="608" cy="105" r="3.8"/>
+                                    </g>
+                                    <g fill="#2b6cb0">
+                                        <circle cx="458" cy="175" r="3.8"/><circle cx="515" cy="175" r="3.8"/><circle cx="523" cy="175" r="3.8"/>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Authentic Teal Footer Bar -->
+                <div class="bg-[#4ab6c4] text-slate-900 px-8 py-4 text-[11px] font-bold tracking-wide grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div class="space-y-1.5">
+                        <a href="#privacy-architecture" class="flex items-center space-x-1.5 cursor-pointer hover:underline"><span>👁</span><span>PRIVACY</span></a>
+                        <a href="#privacy-architecture" class="flex items-center space-x-1.5 cursor-pointer hover:underline"><span>📄</span><span>TERMS OF USE</span></a>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label for="state-chord" class="flex items-center space-x-1.5 cursor-pointer hover:underline"><span>↪</span><span>LOGOUT</span></label>
+                        <label for="state-table" class="flex items-center space-x-1.5 cursor-pointer hover:underline"><span>🔑</span><span>CHANGE PASSWORD</span></label>
+                    </div>
+                    <div class="space-y-1.5">
+                        <label for="toggle-pitch-modal" class="flex items-center space-x-1.5 cursor-pointer hover:underline"><span>✉</span><span>SUPPORT</span></label>
+                    </div>
+                    <div class="space-y-1.5">
+                        <div class="flex items-center space-x-1.5"><span>📅</span><span>15 OCTOBER 2026</span></div>
+                        <div class="flex items-center space-x-1.5"><span>ℹ</span><span>VER 8.0</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: PRIVACY & HOW IT WORKS -->
+    <section id="privacy-architecture" class="py-16 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-emerald-700">Privacy-First Architecture</span>
+                <h2 class="text-3xl font-extrabold text-ic-navy mt-1">
+                    How Orbit Works on Your Existing PiC Infrastructure
+                </h2>
+                <p class="text-slate-600 mt-2 text-sm sm:text-base">
+                    The system does not use facial recognition and masks individuals' faces and heads. Since no personal data is collected, stored, or processed, Orbit poses <strong>zero compliance risk under GDPR</strong>.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50">
+                    <span class="text-xs font-bold uppercase px-3 py-1 rounded-full bg-sky-100 text-ic-blue">1. PiC Sensor</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 mt-4">Real-Time Counting Capture</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Builds directly on your existing Intelligent Counting PiC sensors positioned between zones to collect real-time movement data without requiring a disruptive hardware rip-and-replace.
+                    </p>
+                </div>
+
+                <div class="border-2 border-ic-blue rounded-2xl p-7 bg-white shadow-md">
+                    <span class="text-xs font-bold uppercase px-3 py-1 rounded-full bg-emerald-100 text-emerald-800">2. Processing GPU (Edge AI)</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 mt-4">Local Face Masking &amp; 21 TOPS AI</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Multiple PiC sensors connect to a single fanless Edge GPU powered by <strong>NVIDIA® Jetson Xavier™ NX</strong>. All deep-learning processing occurs 100% locally on the GPU—no visitor data is ever transmitted externally.
+                    </p>
+                </div>
+
+                <div class="border border-slate-200 rounded-2xl p-7 bg-slate-50/50">
+                    <span class="text-xs font-bold uppercase px-3 py-1 rounded-full bg-orange-100 text-ic-orange">3. XML Output &amp; Reporting</span>
+                    <h3 class="text-lg font-extrabold text-slate-900 mt-4">Simple XML &amp; Ver 8.0 Analytics</h3>
+                    <p class="text-sm text-slate-600 mt-2 leading-relaxed">
+                        Generates a clean, lightweight XML file with count data and anonymous unique visitor IDs—gathered automatically by Intelligent Counting software for Chord, Sankey, and Timeline reporting.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: EDGE GPU HARDWARE SPECIFICATIONS -->
+    <section id="hardware-specs" class="py-16 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid lg:grid-cols-12 gap-10 items-center">
+                <div class="lg:col-span-5 space-y-4">
+                    <span class="text-xs font-mono uppercase tracking-widest text-ic-orange">Edge Computing Unit</span>
+                    <h2 class="text-3xl font-extrabold">Palm-Sized Fanless Micro GPU</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Engineered for silent, maintenance-free reliability (`115.70mm × 85mm × 46.50mm`). Connects multiple PiC sensors to a single processing unit via Gigabit LAN.
+                    </p>
+                    <div class="grid grid-cols-2 gap-3 pt-2 text-xs">
+                        <div class="bg-slate-800 border border-slate-700 rounded-xl p-3.5">
+                            <div class="text-slate-400">Interfaces</div>
+                            <div class="font-bold text-white mt-1">12-24V PWR · GbE LAN · HDMI · 2× USB</div>
+                        </div>
+                        <div class="bg-slate-800 border border-slate-700 rounded-xl p-3.5">
+                            <div class="text-slate-400">Operating Temp</div>
+                            <div class="font-bold text-white mt-1">-10°C to 60°C (Fanless)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-7">
+                    <div class="bg-slate-800/80 border border-slate-700 rounded-2xl overflow-hidden text-xs sm:text-sm">
+                        <div class="px-6 py-3.5 bg-slate-800 border-b border-slate-700 font-bold flex justify-between">
+                            <span>Orbit Edge Processing Unit Specifications</span>
+                            <span class="text-sky-400 font-mono">NVIDIA® Jetson Xavier™ NX</span>
+                        </div>
+                        <div class="divide-y divide-slate-700/70">
+                            <div class="px-6 py-3 grid grid-cols-3"><span class="text-slate-400">Processor / AI</span><span class="col-span-2 font-semibold">384 CUDA Cores, 48 Tensor Cores, up to 21 TOPS (INT8)</span></div>
+                            <div class="px-6 py-3 grid grid-cols-3"><span class="text-slate-400">CPU / GPU Freq</span><span class="col-span-2">ARMv8.2 (64-bit) HMP CPU (1.9 GHz) | GPU (1.1 GHz)</span></div>
+                            <div class="px-6 py-3 grid grid-cols-3"><span class="text-slate-400">Memory &amp; Storage</span><span class="col-span-2">8GB LPDDR4 Memory + 16GB eMMC Flash Storage</span></div>
+                            <div class="px-6 py-3 grid grid-cols-3"><span class="text-slate-400">Dimensions</span><span class="col-span-2">115.70 × 85.0 × 46.50 mm (Mounting bracket: 118 mm)</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 text-slate-400 py-8 border-t border-slate-800 text-xs">
+        <div class="max-w-7xl mx-auto px-6 flex flex-wrap items-center justify-between gap-4">
+            <div class="font-bold text-white">intelligent counting<span class="text-ic-orange">.</span> — Orbit Visitor Journey Mapping</div>
+            <div class="flex items-center space-x-6">
+                <span>www.intelligentcounting.com</span>
+                <span>Contact Us: +44 (0)118 932 4660</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- COLLEAGUE PITCH MODAL (Driven by #toggle-pitch-modal checkbox) -->
+    <div class="pitch-modal-backdrop fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-sm items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border border-slate-200">
+            <div class="flex justify-between items-start">
+                <div>
+                    <span class="text-[11px] font-bold uppercase tracking-wider text-ic-orange">Colleague Alignment</span>
+                    <h3 class="text-xl font-extrabold text-ic-navy">The 30-Second Orbit Pitch</h3>
+                </div>
+                <label for="toggle-pitch-modal" class="cursor-pointer text-slate-400 hover:text-slate-700 font-bold px-2">✕</label>
+            </div>
+            <p class="mt-4 p-4 bg-slate-50 border-l-4 border-ic-orange rounded-r-xl text-sm text-slate-700 italic leading-relaxed">
+                "Our PiC sensors already tell venues how many people walk through the front door. Orbit shows what happens next. By plugging a palm-sized NVIDIA Edge GPU into their existing PiC sensors, we track anonymous zone-to-zone journeys across receptions, galleries, cafes, and shops—with faces masked and 100% local processing so there is zero GDPR risk."
+            </p>
+            <div class="mt-5 text-right">
+                <label for="toggle-pitch-modal" class="cursor-pointer inline-block bg-ic-blue hover:bg-ic-navy text-white text-xs font-bold px-4 py-2 rounded-lg transition">Close</label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progressive Enhancement Script for UUID Table Row Clicks -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var rows = document.querySelectorAll('.visitor-row');
+            var uuidInput = document.getElementById('visitor-uuid-input');
+            var timelineRadio = document.getElementById('state-timeline');
+            var statusBadge = document.getElementById('report-status-badge');
+            var generateBtn = document.getElementById('btn-generate-report');
+
+            rows.forEach(function (row) {
+                row.addEventListener('click', function () {
+                    var uuid = row.getAttribute('data-uuid');
+                    if (uuid && uuidInput) {
+                        uuidInput.value = uuid;
+                    }
+                    if (timelineRadio) {
+                        timelineRadio.checked = true;
+                    }
+                    if (statusBadge) {
+                        statusBadge.classList.remove('hidden');
+                    }
+                });
+            });
+
+            if (generateBtn && statusBadge) {
+                generateBtn.addEventListener('click', function () {
+                    statusBadge.classList.remove('hidden');
+                    setTimeout(function () {
+                        statusBadge.classList.add('hidden');
+                    }, 2500);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
